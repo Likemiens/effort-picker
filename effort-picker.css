@@ -1,0 +1,212 @@
+/* The effort picker's own styles; effort-picker.tsx imports them. Colours can be set from outside through --ep-*. */
+.ep {
+  --ep-surface: #e7e5e6;
+  --ep-dim: #666465;
+  --ep-hatch: rgb(40 30 35 / 9.5%);
+  --ep-edge: rgb(40 30 35 / 20%);
+  --ep-below: #1c77cc;
+  --ep-above: #dc3639;
+  --ep-accent: #b03e18;
+  --ep-off: #a3a1a2;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 420px);
+  padding: 20px 0 6px;
+  border-radius: 28px;
+  background: var(--ep-surface);
+  font-family: var(--ui-font, inherit);
+  isolation: isolate;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* nothing is drawn until the first frame */
+.ep:not([data-ready]) .ep-picker {
+  visibility: hidden;
+}
+
+/* ── The picker: a line of words, the band, a line of words ── */
+
+.ep-picker {
+  position: relative;
+  width: 100%;
+  height: 118px;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.ep-shape {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 74px;
+  overflow: visible;
+}
+
+/* the glow behind the line at the maximum: larger than the band by 40 on every side (the translate in its svg) */
+.ep-glow {
+  position: absolute;
+  top: -20px;
+  left: -40px;
+  display: block;
+  width: calc(100% + 80px);
+  height: 154px;
+  filter: blur(13px) saturate(1.25);
+  opacity: 0;
+  /* from the warm colours on: the pale tail would only dirty the sheet */
+  -webkit-mask-image: linear-gradient(90deg, transparent 16%, #000 36%);
+  mask-image: linear-gradient(90deg, transparent 16%, #000 36%);
+  pointer-events: none;
+}
+
+/* the light that runs along the line: it lights the colours under it instead of washing them out */
+.ep-sheen {
+  mix-blend-mode: overlay;
+}
+
+.ep-caption,
+.ep-usual {
+  position: absolute;
+  left: 0;
+  color: var(--ep-dim);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ep-caption {
+  top: 0;
+  transition: opacity 200ms ease-out 140ms;
+}
+
+.ep-caption[data-hidden] {
+  opacity: 0;
+  transition-delay: 0ms;
+  transition-duration: 120ms;
+}
+
+.ep-usual {
+  top: 98px;
+}
+
+/* the tooltip: a solid plate standing right on the top edge of the hatched block */
+.ep-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 7px;
+  background-color: var(--ep-below);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.95;
+  transform-origin: 50% 100%;
+  transition:
+    opacity 170ms ease-out,
+    scale 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 150ms ease-out;
+  pointer-events: none;
+}
+
+.ep-pill[data-side="above"] {
+  background-color: var(--ep-above);
+}
+
+.ep-pill[data-on] {
+  opacity: 1;
+  scale: 1;
+}
+
+/* at the maximum the plate carries the colours of the line, flowing */
+.ep-pill[data-side="max"] {
+  background-color: #5f39c9;
+  background-image: linear-gradient(90deg, #5f39c9, #c2336f, #d63c3c, #c2501a, #d63c3c, #c2336f, #5f39c9);
+  background-size: 300% 100%;
+  animation: ep-flow 2400ms linear infinite;
+}
+
+@keyframes ep-flow {
+  to {
+    background-position: -150% 0;
+  }
+}
+
+.ep-thumb {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: grab;
+  touch-action: none;
+}
+
+.ep-thumb:active {
+  cursor: grabbing;
+}
+
+.ep-thumb:focus-visible {
+  outline: 2px solid #0c75f1;
+  outline-offset: 2px;
+}
+
+.ep-thumb:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.ep-thumb i {
+  display: block;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+}
+
+.ep-clear {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  color: var(--ep-accent);
+  font: inherit;
+  font-size: 17px;
+  cursor: pointer;
+  transition:
+    color 180ms ease-out,
+    transform 120ms ease-out;
+}
+
+.ep-clear:disabled {
+  color: var(--ep-off);
+  cursor: default;
+}
+
+.ep-clear:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.ep-clear:focus-visible {
+  border-radius: 10px;
+  outline: 2px solid #0c75f1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ep-pill[data-side="max"] {
+    animation: none;
+  }
+}

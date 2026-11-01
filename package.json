@@ -1,0 +1,54 @@
+{
+  "name": "@likemiens/effort-picker",
+  "version": "1.0.0",
+  "description": "How hard to try, from 0 to 10, as a React component: a line that swells into a drop under the finger, a tooltip over it outside the usual range, and a bar that comes alive at the maximum.",
+  "keywords": [
+    "react",
+    "react-component",
+    "slider",
+    "range",
+    "effort",
+    "tooltip",
+    "svg",
+    "spring-animation",
+    "ai-agent"
+  ],
+  "homepage": "https://likemiens.com/ui/effort-picker",
+  "bugs": {
+    "url": "https://github.com/Likemiens/effort-picker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Likemiens/effort-picker.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Likemiens",
+    "url": "https://github.com/Likemiens"
+  },
+  "type": "module",
+  "main": "./effort-picker.js",
+  "files": [
+    "effort-picker.js",
+    "effort-picker.d.ts",
+    "effort-picker.css"
+  ],
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "module": "./effort-picker.js",
+  "types": "./effort-picker.d.ts",
+  "exports": {
+    ".": {
+      "types": "./effort-picker.d.ts",
+      "import": "./effort-picker.js"
+    },
+    "./effort-picker.css": "./effort-picker.css"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
